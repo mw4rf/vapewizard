@@ -22,6 +22,9 @@ public class Main {
         app.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         app.pack();
 
+        // Do not resize
+        app.setResizable(false);
+
         // Center on screen
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         app.setLocation(dim.width / 2 - app.getSize().width / 2, dim.height / 2 - app.getSize().height / 2);
