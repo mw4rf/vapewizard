@@ -36,12 +36,44 @@ public class Wire {
     public static final String NIDH = "Nickel DH";
     public static final String NFT70 = "Nifethal 70";
     public static final String NFT52 = "Nifethal 52";
-
+    public static final String AWG = "AWG";
+    public static final String METRIC = "MM";
     private String NAME;
     private Double RESISTANCE;
     private Double TCR;
     private Double DENSITY;
+    private Double DIAMETER_AWG;
+    private Double DIAMETER_MM;
 
+    /**
+     * Setup the wire with the given diameter and converts mm to awg and awg to mm.
+     *
+     * @param diameter
+     * @param diameter_unit
+     */
+    public Wire(Double diameter, String diameter_unit) {
+        // diameter [mm] = 0.127 * 92 ^ ((36-AWG)/39)
+        // AWG = - ln (diameter [mm]/0.127) / (ln (92) * 39) – 36)
+
+        switch (diameter_unit) {
+
+            case (AWG):
+                DIAMETER_AWG = diameter;
+                DIAMETER_MM = 0.127 * Math.pow(92, (36 - DIAMETER_AWG) / 39);
+                break;
+
+            case (METRIC):
+                DIAMETER_MM = diameter;
+                DIAMETER_AWG = -Math.log(DIAMETER_MM / 0.127) / (Math.log(92) * 39 - 36);
+                break;
+        }
+    }
+
+    /**
+     * Setup the wire with the resistance, TCR and density of the given metal.
+     *
+     * @param wire_name is a static field of the class (e.g. Wire.GOLD)
+     */
     public Wire(String wire_name) {
         NAME = wire_name;
 
@@ -234,6 +266,14 @@ public class Wire {
                 break;
 
         }
+    }
+
+    public Double getDiameterAWG() {
+        return DIAMETER_AWG;
+    }
+
+    public Double getDiameterMM() {
+        return DIAMETER_MM;
     }
 
     public Double getResistance() {
