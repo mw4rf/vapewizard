@@ -37,11 +37,14 @@ public class Wire {
     public static final String NFT70 = "Nifethal 70";
     public static final String NFT52 = "Nifethal 52";
 
+    private String NAME;
     private Double RESISTANCE;
     private Double TCR;
     private Double DENSITY;
 
     public Wire(String wire_name) {
+        NAME = wire_name;
+
         switch(wire_name) {
 
             case(KANTHAL_A1_APM):
@@ -245,4 +248,12 @@ public class Wire {
         return DENSITY;
     }
 
+    public String getName() {
+        return NAME;
+    }
+
+    @Override
+    public String toString() {
+        return NAME;
+    }
 }

@@ -540,14 +540,105 @@
               </grid>
             </children>
           </grid>
-          <grid id="8cc56" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="8cc56" layout-manager="GridLayoutManager" row-count="2" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <tabbedpane title="Coil Maker"/>
             </constraints>
             <properties/>
             <border type="none"/>
-            <children/>
+            <children>
+              <grid id="8563f" layout-manager="GridLayoutManager" row-count="5" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+                <margin top="0" left="0" bottom="0" right="0"/>
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties/>
+                <border type="line" title="Wire"/>
+                <children>
+                  <component id="58752" class="javax.swing.JComboBox" binding="wireComboBox">
+                    <constraints>
+                      <grid row="0" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties/>
+                  </component>
+                  <component id="74b7f" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Wire Name"/>
+                    </properties>
+                  </component>
+                  <component id="903f6" class="javax.swing.JLabel" binding="wireNameLabel">
+                    <constraints>
+                      <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="wire_name"/>
+                    </properties>
+                  </component>
+                  <component id="e7c54" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Resistance"/>
+                    </properties>
+                  </component>
+                  <component id="d417f" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="3" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="TCR"/>
+                    </properties>
+                  </component>
+                  <component id="89179" class="javax.swing.JLabel">
+                    <constraints>
+                      <grid row="4" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Density"/>
+                    </properties>
+                  </component>
+                  <component id="6f55c" class="javax.swing.JLabel" binding="wireResistanceLabel">
+                    <constraints>
+                      <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="wire_resistance"/>
+                    </properties>
+                  </component>
+                  <component id="3ba46" class="javax.swing.JLabel" binding="wireTCRLabel">
+                    <constraints>
+                      <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="wire_tcr"/>
+                    </properties>
+                  </component>
+                  <component id="367c8" class="javax.swing.JLabel" binding="wireDensityLabel">
+                    <constraints>
+                      <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="wire_density"/>
+                    </properties>
+                  </component>
+                </children>
+              </grid>
+              <hspacer id="828cd">
+                <constraints>
+                  <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </hspacer>
+              <vspacer id="79f2a">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="6" hsize-policy="1" anchor="0" fill="2" indent="0" use-parent-layout="false"/>
+                </constraints>
+              </vspacer>
+            </children>
           </grid>
           <grid id="7cebe" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
