@@ -1,6 +1,4 @@
-package fr.valhalla;
-
-import java.util.HashMap;
+package fr.valhalla.coil;
 
 /**
  * Created by mw4rf on 26/08/2016.
@@ -42,18 +40,6 @@ public class Wire {
     private Double RESISTANCE;
     private Double TCR;
     private Double DENSITY;
-
-    public Double getResistance() {
-        return RESISTANCE;
-    }
-
-    public Double getTCR() {
-        return TCR;
-    }
-
-    public Double getDensity() {
-        return DENSITY;
-    }
 
     public Wire(String wire_name) {
         switch(wire_name) {
@@ -245,6 +231,18 @@ public class Wire {
                 break;
 
         }
+    }
+
+    public Double getResistance() {
+        return RESISTANCE;
+    }
+
+    public Double getTCR() {
+        return TCR;
+    }
+
+    public Double getDensity() {
+        return DENSITY;
     }
 
 }

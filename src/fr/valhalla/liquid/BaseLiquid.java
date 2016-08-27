@@ -1,7 +1,4 @@
-package fr.valhalla;
-
-import java.util.ArrayList;
-import java.util.Arrays;
+package fr.valhalla.liquid;
 
 public class BaseLiquid {
 

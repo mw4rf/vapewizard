@@ -1,4 +1,4 @@
-package fr.valhalla;
+package fr.valhalla.coil;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -20,13 +20,13 @@ public class OhmsLaw {
         I = amps;
     }
 
+    public static BigDecimal round(BigDecimal b) {
+        return b.setScale(2, BigDecimal.ROUND_HALF_UP);
+    }
+
     private BigDecimal sqrt(BigDecimal value) {
         BigDecimal x = new BigDecimal(Math.sqrt(value.doubleValue()));
         return x.add(new BigDecimal(value.subtract(x.multiply(x)).doubleValue() / (x.doubleValue() * 2.0)));
-    }
-
-    public static BigDecimal round(BigDecimal b) {
-        return b.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     public BigDecimal getOhms() {

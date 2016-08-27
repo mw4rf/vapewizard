@@ -1,6 +1,5 @@
-package fr.valhalla;
+package fr.valhalla.liquid;
 
-import java.math.RoundingMode;
 import java.util.ArrayList;
 
 /**
