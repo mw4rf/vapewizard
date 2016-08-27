@@ -85,6 +85,7 @@ public class MainFrame {
     private JTextField coilTargetWrapsField;
     private JLabel coilResistanceLabel;
     private JLabel coilVaporTemperatureLabel;
+    private JSlider coilTargetPowerSlider;
     private JSpinner coilTargetResistanceSpinner;
 
     {
@@ -137,6 +138,12 @@ public class MainFrame {
         wireComboModel.addElement(new Wire(Wire.SILVER));
         wireComboModel.addElement(new Wire(Wire.TUNGSTEN));
         wireComboBox.setModel(wireComboModel);
+
+        Wire w = (Wire) wireComboBox.getSelectedItem();
+        wireNameLabel.setText(w.getName());
+        wireDensityLabel.setText(w.getDensity().toString());
+        wireResistanceLabel.setText(w.getResistivity().toString());
+        wireTCRLabel.setText(w.getTCR().toString());
 
 
         /**
@@ -276,7 +283,9 @@ public class MainFrame {
         ampsField.addFocusListener(ohmslistener);
         wattsField.addFocusListener(ohmslistener);
 
-        // Wire combo selection change
+        /**
+         * Wire combo selection change
+         */
         wireComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -321,6 +330,21 @@ public class MainFrame {
             public void focusLost(FocusEvent e) {
                 super.focusLost(e);
                 coil(false);
+            }
+        });
+        coilTargetPowerField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                super.focusLost(e);
+                coilTargetPowerSlider.setValue(new Double(coilTargetPowerField.getText()).intValue());
+                coil(true);
+            }
+        });
+        coilTargetPowerSlider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                coilTargetPowerField.setText("" + coilTargetPowerSlider.getValue());
+                coil(true);
             }
         });
     }
@@ -595,6 +619,8 @@ public class MainFrame {
         panel2.setBorder(BorderFactory.createTitledBorder(null, "Target Liquid", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, new Font(panel2.getFont().getName(), Font.BOLD, 16), new java.awt.Color(-11834898)));
         nicotine_slider = new JSlider();
         nicotine_slider.setBackground(new java.awt.Color(-1118482));
+        nicotine_slider.setMajorTickSpacing(5);
+        nicotine_slider.setMinorTickSpacing(1);
         nicotine_slider.setPaintLabels(true);
         nicotine_slider.setPaintTicks(true);
         nicotine_slider.setSnapToTicks(true);
@@ -768,6 +794,7 @@ public class MainFrame {
         coilTargetResistanceLabel.setText("Ω");
         panel8.add(coilTargetResistanceLabel, new com.intellij.uiDesigner.core.GridConstraints(0, 2, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         coilTargetResistanceField = new JTextField();
+        coilTargetResistanceField.setText("1.0");
         panel8.add(coilTargetResistanceField, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         final JLabel label37 = new JLabel();
         label37.setText("Resistance");
@@ -790,31 +817,31 @@ public class MainFrame {
         label40.setText("Heat flux");
         panel9.add(label40, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         coilWireLengthLabel = new JLabel();
-        coilWireLengthLabel.setText("Label");
+        coilWireLengthLabel.setText("");
         panel9.add(coilWireLengthLabel, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         coilHeatFluxLabel = new JLabel();
-        coilHeatFluxLabel.setText("Label");
+        coilHeatFluxLabel.setText("");
         panel9.add(coilHeatFluxLabel, new com.intellij.uiDesigner.core.GridConstraints(3, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label41 = new JLabel();
         label41.setText("Coil resistance");
         panel9.add(label41, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         coilResistanceLabel = new JLabel();
-        coilResistanceLabel.setText("Label");
+        coilResistanceLabel.setText("");
         panel9.add(coilResistanceLabel, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label42 = new JLabel();
         label42.setText("Wraps number");
         panel9.add(label42, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         coilWrapsNumberLabel = new JLabel();
-        coilWrapsNumberLabel.setText("Label");
+        coilWrapsNumberLabel.setText("");
         panel9.add(coilWrapsNumberLabel, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label43 = new JLabel();
         label43.setText("Vapor Temperature");
         panel9.add(label43, new com.intellij.uiDesigner.core.GridConstraints(4, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         coilVaporTemperatureLabel = new JLabel();
-        coilVaporTemperatureLabel.setText("Label");
+        coilVaporTemperatureLabel.setText("");
         panel9.add(coilVaporTemperatureLabel, new com.intellij.uiDesigner.core.GridConstraints(4, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel10 = new JPanel();
-        panel10.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panel10.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
         panel4.add(panel10, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         panel10.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(java.awt.Color.black), "Device Power"));
         final JLabel label44 = new JLabel();
@@ -822,6 +849,15 @@ public class MainFrame {
         panel10.add(label44, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         coilTargetPowerField = new JTextField();
         panel10.add(coilTargetPowerField, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        coilTargetPowerSlider = new JSlider();
+        coilTargetPowerSlider.setMajorTickSpacing(20);
+        coilTargetPowerSlider.setMaximum(100);
+        coilTargetPowerSlider.setMinimum(0);
+        coilTargetPowerSlider.setMinorTickSpacing(5);
+        coilTargetPowerSlider.setPaintLabels(true);
+        coilTargetPowerSlider.setPaintTicks(true);
+        coilTargetPowerSlider.setSnapToTicks(false);
+        panel10.add(coilTargetPowerSlider, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 2, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel11 = new JPanel();
         panel11.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         mainPane.addTab("Ohm's Law", panel11);
