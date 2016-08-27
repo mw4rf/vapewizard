@@ -2,11 +2,12 @@ package fr.valhalla.liquid;
 
 public class BaseLiquid {
 
-    private Double VGpercent;
-    private Double PGpercent;
-    private Double nicotine_mgml;
-    private Double quantity;
-    private Double concentration;
+    private Double VGpercent = new Double(0.0);
+    private Double PGpercent = new Double(0.0);
+    private Double nicotine_mgml = new Double(0.0);
+    private Double quantity = new Double(0.0);
+    private Double concentration = new Double(0.0);
+    private Double price_per_ml = new Double(0.0);
 
     public BaseLiquid() {
     }
@@ -76,5 +77,22 @@ public class BaseLiquid {
     public Integer getDrops() {
         Double drops = this.getQuantity() * 20;
         return (int)Math.round(drops);
+    }
+
+    public void setPricePerML(Double full_price, Double ml) {
+        try {
+            this.price_per_ml = full_price / ml;
+        } catch (Exception e) {
+            // Catch because is ML is 0, this is a division by 0 !
+            this.price_per_ml = 0.0;
+        }
+    }
+
+    public Double getPricePerML() {
+        return this.price_per_ml;
+    }
+
+    public Double getPrice() {
+        return price_per_ml * quantity;
     }
 }

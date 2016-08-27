@@ -10,6 +10,7 @@ public class Liquid extends BaseLiquid {
     private ArrayList<BaseLiquid> bases = new ArrayList<>();
     private ArrayList<BaseLiquid> aromas = new ArrayList<>();
     private Double quantity;
+    private Double price;
 
     public void addBase(BaseLiquid base) {
         this.bases.add(base);
@@ -25,6 +26,18 @@ public class Liquid extends BaseLiquid {
 
     public BaseLiquid getAroma(int index) {
         return this.aromas.get(index);
+    }
+
+    @Override
+    public Double getPrice() {
+        Double price = new Double(0.0);
+        for (BaseLiquid b : bases)
+            if (!b.getPrice().isNaN())
+                price += b.getPrice();
+        for (BaseLiquid b : aromas)
+            if (!b.getPrice().isNaN())
+                price += b.getPrice();
+        return price;
     }
 
 
@@ -82,5 +95,9 @@ public class Liquid extends BaseLiquid {
         super.setVG(vg_percent);
         super.setQuantity(target_quantity);
         super.setNicotine(target_nicotine);
+
+        // Get prices
+        super.setPricePerML(getPrice(), target_quantity);
     }
+
 }
