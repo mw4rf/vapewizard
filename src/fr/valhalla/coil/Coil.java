@@ -34,7 +34,6 @@ public class Coil {
         // Get wraps
         // wraps = (ohms / resistance - innerDiameter - legs*2) / length
         Double wraps = (target_resistance / wire.getResistance() - innerDiameter - legLength * 2) / getWrapLength();
-        System.out.println("ok");
         return wraps;
     }
 
@@ -75,6 +74,20 @@ public class Coil {
         // dist = (length * wraps) + (leg * 2) + diameter;
         Double distance = (getWrapLength() * target_wraps) + (legLength * 2) + innerDiameter;
         return distance;
+    }
+
+    /**
+     * Return the coil heat flux
+     *
+     * @param watts
+     * @param numberOfCoils
+     * @param wraps
+     * @return
+     */
+    public Double getHeatFlux(Double watts, Integer numberOfCoils, Double wraps) {
+        // coeff = (result.watts / (model.coil.count * model.wire.count)) / ((Math.PI * model.wire.width) * dist);
+        Double coeff = (watts / numberOfCoils) / (Math.PI * wire.getDiameter() * getLength(wraps));
+        return coeff;
     }
 
     public Wire getWire() {

@@ -104,36 +104,36 @@ public class MainFrame {
 
         // Add coils to combobox
         DefaultComboBoxModel<Wire> wireComboModel = new DefaultComboBoxModel<Wire>();
-        wireComboModel.addElement(new Wire(Wire.NI200_lin));
-        wireComboModel.addElement(new Wire(Wire.NI200));
-        wireComboModel.addElement(new Wire(Wire.COPPER));
-        wireComboModel.addElement(new Wire(Wire.GOLD));
-        wireComboModel.addElement(new Wire(Wire.INVAR36));
         wireComboModel.addElement(new Wire(Wire.KANTHAL_A1_APM));
         wireComboModel.addElement(new Wire(Wire.KANTHAL_A_AE_AF));
         wireComboModel.addElement(new Wire(Wire.KANTHAL_D));
-        wireComboModel.addElement(new Wire(Wire.NFT52));
-        wireComboModel.addElement(new Wire(Wire.NFT70));
-        wireComboModel.addElement(new Wire(Wire.NICHROME_N20));
-        wireComboModel.addElement(new Wire(Wire.NICHROME_N40));
-        wireComboModel.addElement(new Wire(Wire.NICHROME_N60));
-        wireComboModel.addElement(new Wire(Wire.NICHROME_N70));
-        wireComboModel.addElement(new Wire(Wire.NICHROME_N80));
-        wireComboModel.addElement(new Wire(Wire.NIDH));
-        wireComboModel.addElement(new Wire(Wire.NIFE30));
-        wireComboModel.addElement(new Wire(Wire.NIFE_R));
-        wireComboModel.addElement(new Wire(Wire.NIFE_S));
-        wireComboModel.addElement(new Wire(Wire.NIOBIUM));
-        wireComboModel.addElement(new Wire(Wire.SILVER));
         wireComboModel.addElement(new Wire(Wire.SS_304));
         wireComboModel.addElement(new Wire(Wire.SS_316));
         wireComboModel.addElement(new Wire(Wire.SS_316L));
         wireComboModel.addElement(new Wire(Wire.SS_317L));
         wireComboModel.addElement(new Wire(Wire.SS_321));
         wireComboModel.addElement(new Wire(Wire.SS_430));
+        wireComboModel.addElement(new Wire(Wire.NI200));
+        wireComboModel.addElement(new Wire(Wire.NI200_lin));
         wireComboModel.addElement(new Wire(Wire.TITANIUM_1));
         wireComboModel.addElement(new Wire(Wire.TITANIUM_2));
         wireComboModel.addElement(new Wire(Wire.TITANIUM_READY));
+        wireComboModel.addElement(new Wire(Wire.NICHROME_N20));
+        wireComboModel.addElement(new Wire(Wire.NICHROME_N40));
+        wireComboModel.addElement(new Wire(Wire.NICHROME_N60));
+        wireComboModel.addElement(new Wire(Wire.NICHROME_N70));
+        wireComboModel.addElement(new Wire(Wire.NICHROME_N80));
+        wireComboModel.addElement(new Wire(Wire.NIFE30));
+        wireComboModel.addElement(new Wire(Wire.NIFE_R));
+        wireComboModel.addElement(new Wire(Wire.NIFE_S));
+        wireComboModel.addElement(new Wire(Wire.COPPER));
+        wireComboModel.addElement(new Wire(Wire.GOLD));
+        wireComboModel.addElement(new Wire(Wire.INVAR36));
+        wireComboModel.addElement(new Wire(Wire.NFT52));
+        wireComboModel.addElement(new Wire(Wire.NFT70));
+        wireComboModel.addElement(new Wire(Wire.NIDH));
+        wireComboModel.addElement(new Wire(Wire.NIOBIUM));
+        wireComboModel.addElement(new Wire(Wire.SILVER));
         wireComboModel.addElement(new Wire(Wire.TUNGSTEN));
         wireComboBox.setModel(wireComboModel);
 
@@ -338,6 +338,9 @@ public class MainFrame {
         // Check everything is setup
         // ok, later...
 
+        // Get user data
+        Integer coils = new Integer(coilNumberField.getText());
+
         // Get user data, wanted resistance and/or number of wraps.
         Double target_resistance = 0.0;
         Double target_wraps = 0.0;
@@ -363,13 +366,29 @@ public class MainFrame {
         if (known_resistance) {
             BigDecimal bd = new BigDecimal(coil.getWraps(target_resistance));
             bd = bd.setScale(2, RoundingMode.HALF_UP); // round
-            coilWrapsNumberLabel.setText(bd.toString());
             coilTargetWrapsField.setText(bd.toString());
+            target_wraps = bd.doubleValue();
         } else {
             BigDecimal bd = new BigDecimal(coil.getResistance(target_wraps));
             bd = bd.setScale(2, RoundingMode.HALF_UP); // round
-            coilResistanceLabel.setText(bd.toString());
             coilTargetResistanceField.setText(bd.toString());
+            target_resistance = bd.doubleValue();
+        }
+
+        // Wraps & resistance
+        coilResistanceLabel.setText(target_resistance + " Ω");
+        coilWrapsNumberLabel.setText(target_wraps.toString());
+
+        // Coil length
+        coilWireLengthLabel.setText(new BigDecimal(coil.getLength(target_wraps)).setScale(2, RoundingMode.HALF_UP).toString() + " mm");
+
+        // Heat Flux
+        try {
+            Double watts = new Double(coilTargetPowerField.getText());
+            Double heatflux = coil.getHeatFlux(watts, coils, target_wraps);
+            coilHeatFluxLabel.setText(new BigDecimal(heatflux).setScale(2, RoundingMode.HALF_UP).toString() + " W/mm²");
+        } catch (NumberFormatException e) {
+            // Power is not set, then do nothing.
         }
 
     }
@@ -733,33 +752,34 @@ public class MainFrame {
         panel8.add(coilTargetWrapsField, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         final JPanel panel9 = new JPanel();
         panel9.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(5, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panel9.setBackground(new Color(-4338450));
         panel4.add(panel9, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 2, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label39 = new JLabel();
         label39.setText("Wire length");
-        panel9.add(label39, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel9.add(label39, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final com.intellij.uiDesigner.core.Spacer spacer2 = new com.intellij.uiDesigner.core.Spacer();
         panel9.add(spacer2, new com.intellij.uiDesigner.core.GridConstraints(4, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_VERTICAL, 1, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JLabel label40 = new JLabel();
-        label40.setText("Wraps number");
-        panel9.add(label40, new com.intellij.uiDesigner.core.GridConstraints(2, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label41 = new JLabel();
-        label41.setText("Heat flux");
-        panel9.add(label41, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        label40.setText("Heat flux");
+        panel9.add(label40, new com.intellij.uiDesigner.core.GridConstraints(3, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         coilWireLengthLabel = new JLabel();
         coilWireLengthLabel.setText("Label");
-        panel9.add(coilWireLengthLabel, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        coilWrapsNumberLabel = new JLabel();
-        coilWrapsNumberLabel.setText("Label");
-        panel9.add(coilWrapsNumberLabel, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel9.add(coilWireLengthLabel, new com.intellij.uiDesigner.core.GridConstraints(2, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         coilHeatFluxLabel = new JLabel();
         coilHeatFluxLabel.setText("Label");
         panel9.add(coilHeatFluxLabel, new com.intellij.uiDesigner.core.GridConstraints(3, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label42 = new JLabel();
-        label42.setText("Coil resistance");
-        panel9.add(label42, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label41 = new JLabel();
+        label41.setText("Coil resistance");
+        panel9.add(label41, new com.intellij.uiDesigner.core.GridConstraints(0, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         coilResistanceLabel = new JLabel();
         coilResistanceLabel.setText("Label");
         panel9.add(coilResistanceLabel, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label42 = new JLabel();
+        label42.setText("Wraps number");
+        panel9.add(label42, new com.intellij.uiDesigner.core.GridConstraints(1, 0, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        coilWrapsNumberLabel = new JLabel();
+        coilWrapsNumberLabel.setText("Label");
+        panel9.add(coilWrapsNumberLabel, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_WEST, com.intellij.uiDesigner.core.GridConstraints.FILL_NONE, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel10 = new JPanel();
         panel10.setLayout(new com.intellij.uiDesigner.core.GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
         panel4.add(panel10, new com.intellij.uiDesigner.core.GridConstraints(1, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_BOTH, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
