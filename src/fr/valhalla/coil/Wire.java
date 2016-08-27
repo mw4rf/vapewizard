@@ -39,9 +39,9 @@ public class Wire {
     public static final String AWG = "AWG";
     public static final String METRIC = "MM";
     private String NAME;
-    private Double RESISTANCE;
-    private Double TCR;
-    private Double DENSITY;
+    private Double RESISTIVITY; // Ω mm²/m
+    private Double TCR; // J/g×K
+    private Double DENSITY; // g/cm³
     private Double DIAMETER_AWG;
     private Double DIAMETER_MM;
 
@@ -52,6 +52,24 @@ public class Wire {
      * @param diameter_unit
      */
     public Wire(Double diameter, String diameter_unit) {
+        makeWithDiameter(diameter, diameter_unit);
+    }
+
+    /**
+     * Setup the wire with the resistance, TCR and density of the given metal.
+     *
+     * @param wire_name is a static field of the class (e.g. Wire.GOLD)
+     */
+    public Wire(String wire_name) {
+        makeWithName(wire_name);
+    }
+
+    public Wire(String wire_name, Double diameter, String diameter_unit) {
+        makeWithDiameter(diameter, diameter_unit);
+        makeWithName(wire_name);
+    }
+
+    private void makeWithDiameter(Double diameter, String diameter_unit) {
         // diameter [mm] = 0.127 * 92 ^ ((36-AWG)/39)
         // AWG = - ln (diameter [mm]/0.127) / (ln (92) * 39) – 36)
 
@@ -69,198 +87,192 @@ public class Wire {
         }
     }
 
-    /**
-     * Setup the wire with the resistance, TCR and density of the given metal.
-     *
-     * @param wire_name is a static field of the class (e.g. Wire.GOLD)
-     */
-    public Wire(String wire_name) {
+    private void makeWithName(String wire_name) {
         NAME = wire_name;
-
         switch(wire_name) {
 
             case(KANTHAL_A1_APM):
-                RESISTANCE = 1.45;
+                RESISTIVITY = 1.45;
                 TCR = 0.46;
                 DENSITY = 7.1;
                 break;
 
             case(KANTHAL_A_AE_AF):
-                RESISTANCE = 1.39;
+                RESISTIVITY = 1.39;
                 TCR = 0.4625;
                 DENSITY = 7.15;
                 break;
 
             case(KANTHAL_D):
-                RESISTANCE = 1.35;
+                RESISTIVITY = 1.35;
                 TCR = 0.465;
                 DENSITY = 7.25;
                 break;
 
             case(NICHROME_N20):
-                RESISTANCE = 0.95;
+                RESISTIVITY = 0.95;
                 TCR = 0.447;
                 DENSITY = 8.7;
                 break;
 
             case(NICHROME_N40):
-                RESISTANCE = 1.04;
+                RESISTIVITY = 1.04;
                 TCR = 0.447;
                 DENSITY = 8.6;
                 break;
 
             case(NICHROME_N60):
-                RESISTANCE = 1.11;
+                RESISTIVITY = 1.11;
                 TCR = 0.447;
                 DENSITY = 8.5;
                 break;
 
             case(NICHROME_N70):
-                RESISTANCE = 1.18;
+                RESISTIVITY = 1.18;
                 TCR = 0.447;
                 DENSITY = 8.4;
                 break;
 
             case(NICHROME_N80):
-                RESISTANCE = 1.09;
+                RESISTIVITY = 1.09;
                 TCR = 0.447;
                 DENSITY = 8.31;
                 break;
 
             case(SS_304):
-                RESISTANCE = 0.713;
+                RESISTIVITY = 0.713;
                 TCR = 0.5;
                 DENSITY = 8.0;
                 break;
 
             case(SS_316):
-                RESISTANCE = 0.771;
+                RESISTIVITY = 0.771;
                 TCR = 0.5;
                 DENSITY = 8.0;
                 break;
 
             case(SS_316L):
-                RESISTANCE = 0.75;
+                RESISTIVITY = 0.75;
                 TCR = 0.5;
                 DENSITY = 8.0;
                 break;
 
             case(SS_317L):
-                RESISTANCE = 0.81;
+                RESISTIVITY = 0.81;
                 TCR = 0.5;
                 DENSITY = 7.9;
                 break;
 
             case(SS_321):
-                RESISTANCE = 0.746;
+                RESISTIVITY = 0.746;
                 TCR = 0.5;
                 DENSITY = 8.09;
                 break;
 
             case(SS_430):
-                RESISTANCE = 0.6;
+                RESISTIVITY = 0.6;
                 TCR = 0.46;
                 DENSITY = 7.74;
                 break;
 
             case(GOLD):
-                RESISTANCE = 0.035;
+                RESISTIVITY = 0.035;
                 TCR = 0.129;
                 DENSITY = 19.32;
                 break;
 
             case(SILVER):
-                RESISTANCE = 0.0159;
+                RESISTIVITY = 0.0159;
                 TCR = 0.233;
                 DENSITY = 10.49;
                 break;
 
             case(COPPER):
-                RESISTANCE = 0.0168;
+                RESISTIVITY = 0.0168;
                 TCR = 0.385;
                 DENSITY = 8.96;
                 break;
 
             case(TITANIUM_1):
-                RESISTANCE = 0.47;
+                RESISTIVITY = 0.47;
                 TCR = 0.523;
                 DENSITY = 4.43;
                 break;
 
             case(TITANIUM_2):
-                RESISTANCE = 0.56;
+                RESISTIVITY = 0.56;
                 TCR = 0.54;
                 DENSITY = 4.51;
                 break;
 
             case(TITANIUM_READY):
-                RESISTANCE = 0.85;
+                RESISTIVITY = 0.85;
                 TCR = 0.56;
                 DENSITY = 4.75;
                 break;
 
             case(TUNGSTEN):
-                RESISTANCE = 0.56;
+                RESISTIVITY = 0.56;
                 TCR = 0.134;
                 DENSITY = 19.25;
                 break;
 
             case(NIOBIUM):
-                RESISTANCE = 1.46809443507;
+                RESISTIVITY = 1.46809443507;
                 TCR = 0.45;
                 DENSITY = 7.5;
                 break;
 
             case(NI200_lin):
-                RESISTANCE = 0.096;
+                RESISTIVITY = 0.096;
                 TCR = 0.456;
                 DENSITY = 8.89;
                 break;
 
             case(NI200):
-                RESISTANCE = 0.096;
+                RESISTIVITY = 0.096;
                 TCR = 0.456;
                 DENSITY = 8.89;
                 break;
 
             case(NIFE30):
-                RESISTANCE = 0.33;
+                RESISTIVITY = 0.33;
                 TCR = 0.45;
                 DENSITY = 8.2;
                 break;
 
             case(NIFE_R):
-                RESISTANCE = 0.4334;
+                RESISTIVITY = 0.4334;
                 TCR = 0.45;
                 DENSITY = 8.2;
                 break;
 
             case(NIFE_S):
-                RESISTANCE = 0.21;
+                RESISTIVITY = 0.21;
                 TCR = 0.45;
                 DENSITY = 8.5;
                 break;
 
             case(INVAR36):
-                RESISTANCE = 0.82;
+                RESISTIVITY = 0.82;
                 TCR = 0.515;
                 DENSITY = 8.055;
                 break;
 
             case(NIDH):
-                RESISTANCE = 0.09;
+                RESISTIVITY = 0.09;
                 TCR = 0.48;
                 DENSITY = 8.9;
                 break;
 
             case(NFT70):
-                RESISTANCE = 0.2;
+                RESISTIVITY = 0.2;
                 TCR = 0.52;
                 DENSITY = 8.45;
                 break;
 
             case(NFT52):
-                RESISTANCE = 0.37;
+                RESISTIVITY = 0.37;
                 TCR = 0.5;
                 DENSITY = 8.2;
                 break;
@@ -268,16 +280,36 @@ public class Wire {
         }
     }
 
-    public Double getDiameterAWG() {
+    /**
+     * Get wire section.
+     * Section = (diameter / 2)^2 * pi
+     *
+     * @return
+     */
+    public Double getSection() {
+        return Math.PI * Math.pow(getDiameter() / 2, 2);
+    }
+
+    /**
+     * Get wire resistance.
+     * Wire Resistance = Metal Resistivity / Wire Section / 1000
+     *
+     * @return
+     */
+    public Double getResistance() {
+        return getResistivity() / getSection() / 1000;
+    }
+
+    public Double getAWG() {
         return DIAMETER_AWG;
     }
 
-    public Double getDiameterMM() {
+    public Double getDiameter() {
         return DIAMETER_MM;
     }
 
-    public Double getResistance() {
-        return RESISTANCE;
+    public Double getResistivity() {
+        return RESISTIVITY;
     }
 
     public Double getTCR() {
