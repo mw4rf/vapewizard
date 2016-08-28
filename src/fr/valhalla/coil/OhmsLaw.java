@@ -20,6 +20,10 @@ public class OhmsLaw {
         I = amps;
     }
 
+    public OhmsLaw(String ohms, String volts, String watts, String amps) {
+        this(new BigDecimal(ohms), new BigDecimal(volts), new BigDecimal(watts), new BigDecimal(amps));
+    }
+
     public static BigDecimal round(BigDecimal b) {
         return b.setScale(2, BigDecimal.ROUND_HALF_UP);
     }
