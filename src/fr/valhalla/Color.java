@@ -6,7 +6,9 @@ import java.awt.color.ColorSpace;
  * Created by mw4rf on 27/08/2016.
  */
 public class Color extends java.awt.Color {
-
+    // Misc
+    public static final Color WHITE = new Color(255, 255, 255);
+    public static final Color BLACK = new Color(0, 0, 0);
     // Red
     public static final Color FIREBRICK = new Color(178, 34, 34);
     public static final Color INDIAN_RED = new Color(176, 23, 31);

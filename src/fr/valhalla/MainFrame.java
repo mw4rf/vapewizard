@@ -9,12 +9,14 @@ import fr.valhalla.liquid.Liquid;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.plaf.basic.BasicProgressBarUI;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Calendar;
 
 /**
  * Created by mw4rf on 23/08/2016.
@@ -82,7 +84,6 @@ public class MainFrame {
     private JTextField coilTargetPowerField;
     private JTextField coilTargetWrapsField;
     private JLabel coilResistanceLabel;
-    private JLabel coilVaporTemperatureLabel;
     private JSlider coilTargetPowerSlider;
     private JTextField base2Price;
     private JTextField base1Price;
@@ -98,6 +99,9 @@ public class MainFrame {
     private JLabel priceTotalLabel;
     private JLabel coilVoltageLabel;
     private JLabel coilAmpsLabel;
+    private JProgressBar heatFluxProgressBar;
+    private JLabel copyrightLabel;
+    private JLabel versionLabel;
     private JSpinner coilTargetResistanceSpinner;
 
     public MainFrame() {
@@ -105,9 +109,6 @@ public class MainFrame {
         // Set nicotine slider max value
         nicotine_slider.setMaximum(new Integer(base1nico.getText()));
         nicotine_slider.setValue(new Integer(target_nicotine.getText()));
-
-        // Brew !
-        brew();
 
         // Add coils to combobox
         DefaultComboBoxModel<Wire> wireComboModel = new DefaultComboBoxModel<Wire>();
@@ -352,6 +353,17 @@ public class MainFrame {
                 coil(true);
             }
         });
+
+
+        // Brew !
+        brew();
+        // Coil !
+        coil(true);
+
+        // Copyright
+        copyrightLabel.setText("Copyright (c) 2015-" + Calendar.getInstance().get(Calendar.YEAR) + " Guillaume Florimond");
+        versionLabel.setText("Version " + Main.VERSION);
+
     }
 
     /**
@@ -418,28 +430,92 @@ public class MainFrame {
             Double watts = new Double(coilTargetPowerField.getText());
             Double heatflux = coil.getHeatFlux(watts, coils, target_wraps) * 1000; // *1000 for display, mW instead of Watts
             coilHeatFluxLabel.setText(new BigDecimal(heatflux).setScale(2, RoundingMode.HALF_UP).toString() + " mW/mm²");
+            heatFluxProgressBar.setValue(new BigDecimal(heatflux).intValue());
+            heatFluxProgressBar.setUI(new BasicProgressBarUI() {
+                protected Color getSelectionBackground() {
+                    return Color.WHITE;
+                }
+
+                protected Color getSelectionForeground() {
+                    return Color.WHITE;
+                }
+            });
             // Set label color
-            if (heatflux < 80) {
-                coilVaporTemperatureLabel.setText("Very Cold");
-                coilVaporTemperatureLabel.setForeground(Color.DODGER_BLUE);
-            } else if (heatflux < 110) {
-                coilVaporTemperatureLabel.setText("Colder");
-                coilVaporTemperatureLabel.setForeground(Color.MINT);
-            } else if (heatflux < 150) {
-                coilVaporTemperatureLabel.setText("Cold");
-                coilVaporTemperatureLabel.setForeground(Color.EMERALD);
-            } else if (heatflux < 200) {
-                coilVaporTemperatureLabel.setText("Warm");
-                coilVaporTemperatureLabel.setForeground(Color.LIGHT_GOLD);
-            } else if (heatflux < 250) {
-                coilVaporTemperatureLabel.setText("Warmer");
-                coilVaporTemperatureLabel.setForeground(Color.DARK_GOLD);
+            if (heatflux < 60) {
+                heatFluxProgressBar.setString("Freezing");
+                heatFluxProgressBar.setBackground(Color.LIGHT_STEEL_BLUE);
+                heatFluxProgressBar.setForeground(Color.LIGHT_STEEL_BLUE);
+                heatFluxProgressBar.setUI(new BasicProgressBarUI() {
+                    protected Color getSelectionBackground() {
+                        return Color.BLACK;
+                    }
+
+                    protected Color getSelectionForeground() {
+                        return Color.BLACK;
+                    }
+                });
+            } else if (heatflux < 100) {
+                heatFluxProgressBar.setString("Very Cold");
+                heatFluxProgressBar.setBackground(Color.SLATE_BLUE);
+                heatFluxProgressBar.setForeground(Color.SLATE_BLUE);
+            } else if (heatflux < 140) {
+                heatFluxProgressBar.setString("Colder");
+                heatFluxProgressBar.setBackground(Color.STEEL_BLUE);
+                heatFluxProgressBar.setForeground(Color.STEEL_BLUE);
+            } else if (heatflux < 180) {
+                heatFluxProgressBar.setString("Cold");
+                heatFluxProgressBar.setBackground(Color.DODGER_BLUE);
+                heatFluxProgressBar.setForeground(Color.DODGER_BLUE);
+            } else if (heatflux < 220) {
+                heatFluxProgressBar.setString("A bit cold");
+                heatFluxProgressBar.setBackground(Color.TEAL);
+                heatFluxProgressBar.setForeground(Color.TEAL);
+            } else if (heatflux < 260) {
+                heatFluxProgressBar.setString("A bit warm");
+                heatFluxProgressBar.setBackground(Color.EMERALD);
+                heatFluxProgressBar.setForeground(Color.EMERALD);
             } else if (heatflux < 300) {
-                coilVaporTemperatureLabel.setText("Hot");
-                coilVaporTemperatureLabel.setForeground(Color.CRIMSON);
+                heatFluxProgressBar.setString("Warm");
+                heatFluxProgressBar.setBackground(Color.LIGHT_GOLD);
+                heatFluxProgressBar.setForeground(Color.LIGHT_GOLD);
+                heatFluxProgressBar.setUI(new BasicProgressBarUI() {
+                    protected Color getSelectionBackground() {
+                        return Color.BLACK;
+                    }
+
+                    protected Color getSelectionForeground() {
+                        return Color.BLACK;
+                    }
+                });
+            } else if (heatflux < 350) {
+                heatFluxProgressBar.setString("Warmer");
+                heatFluxProgressBar.setBackground(Color.DARK_GOLD);
+                heatFluxProgressBar.setForeground(Color.DARK_GOLD);
+                heatFluxProgressBar.setUI(new BasicProgressBarUI() {
+                    protected Color getSelectionBackground() {
+                        return Color.BLACK;
+                    }
+
+                    protected Color getSelectionForeground() {
+                        return Color.BLACK;
+                    }
+                });
+            } else if (heatflux < 400) {
+                heatFluxProgressBar.setString("A bit hot");
+                heatFluxProgressBar.setBackground(Color.LIGHT_ORANGE);
+                heatFluxProgressBar.setForeground(Color.LIGHT_ORANGE);
+            } else if (heatflux < 450) {
+                heatFluxProgressBar.setString("Hot");
+                heatFluxProgressBar.setBackground(Color.DARK_ORANGE);
+                heatFluxProgressBar.setForeground(Color.DARK_ORANGE);
+            } else if (heatflux < 550) {
+                heatFluxProgressBar.setString("Very Hot");
+                heatFluxProgressBar.setBackground(Color.CRIMSON);
+                heatFluxProgressBar.setForeground(Color.CRIMSON);
             } else {
-                coilVaporTemperatureLabel.setText("Very Hot");
-                coilVaporTemperatureLabel.setForeground(Color.FIREBRICK);
+                heatFluxProgressBar.setString("Burning!");
+                heatFluxProgressBar.setBackground(Color.FIREBRICK);
+                heatFluxProgressBar.setForeground(Color.FIREBRICK);
             }
 
             // Voltage

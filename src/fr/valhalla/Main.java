@@ -7,6 +7,9 @@ import java.awt.*;
  * Created by mw4rf on 23/08/2016.
  */
 public class Main {
+
+    public static final String VERSION = "0.3 28/08/2016";
+
     public static void main(String args[]) {
         // Set look and feel
         try {
