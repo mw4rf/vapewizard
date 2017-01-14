@@ -102,6 +102,17 @@ public class MainFrame {
     private JProgressBar heatFluxProgressBar;
     private JLabel copyrightLabel;
     private JLabel versionLabel;
+    private JTabbedPane liquidPane;
+    private JPanel classicLiquidPane;
+    private JPanel boosterLiquidPane;
+    private JTextField bdiy_inAroma;
+    private JTextField bdiy_inVolume;
+    private JTextField bdiy_inNicotine;
+    private JTextField bdiy_inBooster;
+    private JLabel bdiy_outAroma;
+    private JLabel bdiy_outBooster;
+    private JLabel bdiy_outBase;
+    private JButton brewButton;
     private JSpinner coilTargetResistanceSpinner;
 
     public MainFrame() {
@@ -354,6 +365,9 @@ public class MainFrame {
             }
         });
 
+        // Set default tab
+        liquidPane.setSelectedIndex(1);
+
 
         // Brew !
         brew();
@@ -364,6 +378,12 @@ public class MainFrame {
         copyrightLabel.setText("Copyright (c) 2015-" + Calendar.getInstance().get(Calendar.YEAR) + " Guillaume Florimond");
         versionLabel.setText("Version " + Main.VERSION);
 
+        brewButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                brew_booster();
+            }
+        });
     }
 
     /**
@@ -600,6 +620,24 @@ public class MainFrame {
         ampsField.setText(OhmsLaw.round(law.getAmps()).toString());
         wattsField.setText(OhmsLaw.round(law.getWatts()).toString());
         voltsField.setText(OhmsLaw.round(law.getVolts()).toString());
+    }
+
+    public void brew_booster() {
+        /** Get user data */
+        Double inAroma = new Double(bdiy_inAroma.getText());
+        Double inVolume = new Double(bdiy_inVolume.getText());
+        Double inNicotine = new Double(bdiy_inNicotine.getText());
+        Double inBooster = new Double(bdiy_inBooster.getText());
+
+        /** Compute */
+        Double outAroma = inAroma * inVolume / 100;
+        Double outBooster = inVolume * inNicotine / inBooster;
+        Double outBase = inVolume - (outAroma + outBooster);
+
+        /** Display */
+        bdiy_outAroma.setText(outAroma.toString());
+        bdiy_outBooster.setText(outBooster.toString());
+        bdiy_outBase.setText(outBase.toString());
     }
 
 }
