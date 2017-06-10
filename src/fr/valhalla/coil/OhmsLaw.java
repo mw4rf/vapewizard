@@ -13,6 +13,11 @@ public class OhmsLaw {
     BigDecimal P = new BigDecimal("0"); // watts
     BigDecimal I = new BigDecimal("0"); // amps
 
+    public OhmsLaw()
+    {
+
+    }
+
     public OhmsLaw(BigDecimal ohms, BigDecimal volts, BigDecimal watts, BigDecimal amps) {
         R = ohms;
         E = volts;
@@ -31,6 +36,15 @@ public class OhmsLaw {
     private BigDecimal sqrt(BigDecimal value) {
         BigDecimal x = new BigDecimal(Math.sqrt(value.doubleValue()));
         return x.add(new BigDecimal(value.subtract(x.multiply(x)).doubleValue() / (x.doubleValue() * 2.0)));
+    }
+
+    public static BigDecimal getElectroMaxAmps(BigDecimal watts, BigDecimal batteries, BigDecimal volts, BigDecimal efficiency) {
+        // Max intensity by battery = max watts / number of batteries / minimum battery's volts / efficiency (%).
+        BigDecimal factor = efficiency.divide(new BigDecimal("100", MathContext.DECIMAL64));
+        BigDecimal p1 = watts.divide(batteries, MathContext.DECIMAL64);
+        BigDecimal p2 = p1.divide(volts, MathContext.DECIMAL64);
+        BigDecimal p3 = p2.divide(factor, MathContext.DECIMAL64);
+        return p3;
     }
 
     public BigDecimal getOhms() {
@@ -101,5 +115,20 @@ public class OhmsLaw {
         return BigDecimal.ZERO;
     }
 
+    public void setOhms(BigDecimal r) {
+        R = r;
+    }
 
+
+    public void setVolts(BigDecimal e) {
+        E = e;
+    }
+
+    public void setWatts(BigDecimal p) {
+        P = p;
+    }
+
+    public void setAmps(BigDecimal i) {
+        I = i;
+    }
 }

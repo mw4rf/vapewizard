@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.Calendar;
 
@@ -113,6 +114,14 @@ public class MainFrame {
     private JLabel bdiy_outBooster;
     private JLabel bdiy_outBase;
     private JButton brewButton;
+    private JTextField electroOhmsWatts;
+    private JTextField electroOhmsBatteriesNumber;
+    private JTextField electroOhmsVolts;
+    private JTextField electroOhmsInnerChipset;
+    private JButton electroOhmsCalculateButton;
+    private JLabel resultElectroOhms;
+    private JTextField electroOhmsBatteryDischarge;
+    private JLabel resultElectroOhmsSafety;
     private JSpinner coilTargetResistanceSpinner;
 
     public MainFrame() {
@@ -382,6 +391,26 @@ public class MainFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 brew_booster();
+            }
+        });
+        electroOhmsCalculateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                BigDecimal res = OhmsLaw.getElectroMaxAmps(new BigDecimal(electroOhmsWatts.getText()),
+                                                        new BigDecimal(electroOhmsBatteriesNumber.getText()),
+                                                        new BigDecimal(electroOhmsVolts.getText()),
+                                                        new BigDecimal(electroOhmsInnerChipset.getText()))
+                                                        .round(new MathContext(3, RoundingMode.HALF_UP));
+                resultElectroOhms.setText( res.toString() + " Amps / battery");
+
+                BigDecimal mdc = new BigDecimal(electroOhmsBatteryDischarge.getText());
+                if(res.compareTo(mdc) == 1) { // first value greater
+                    resultElectroOhmsSafety.setText("This setup is UNSAFE !!");
+                    resultElectroOhmsSafety.setForeground(Color.red);
+                } else {
+                    resultElectroOhmsSafety.setText("This setup is safe.");
+                    resultElectroOhmsSafety.setForeground(Color.green);
+                }
             }
         });
     }
